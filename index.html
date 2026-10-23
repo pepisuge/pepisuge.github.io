@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Firenze, 20–22 novembre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFAF7; --surface:#FFFFFF; --ink:#1C3530; --ink-soft:#4E625C; --line:#DCDDD5;
+  --green:#22453B; --pink:#B5655F; --pink-soft:#F1DEDB; --gold:#A8812F; --gold-soft:#F3EAD3;
+  --done:#9AA39E; --map-water:#BFD3D4; --map-land:#F1F0EA; --map-oltr:#ECE7DE;
+  --ven:#A8812F; --sab:#B5655F; --dom:#2F7A62;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1C18; --surface:#152520; --ink:#ECEAE3; --ink-soft:#A9B4AE; --line:#2B3E37;
+    --green:#8FC2AF; --pink:#E39C95; --pink-soft:#3A2725; --gold:#D8B565; --gold-soft:#332A15;
+    --done:#5F6F68; --map-water:#2A4A4C; --map-land:#172A24; --map-oltr:#1B2F28;
+    --ven:#D8B565; --sab:#E39C95; --dom:#6CC3A3;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1C18; --surface:#152520; --ink:#ECEAE3; --ink-soft:#A9B4AE; --line:#2B3E37;
+  --green:#8FC2AF; --pink:#E39C95; --pink-soft:#3A2725; --gold:#D8B565; --gold-soft:#332A15;
+  --done:#5F6F68; --map-water:#2A4A4C; --map-land:#172A24; --map-oltr:#1B2F28;
+  --ven:#D8B565; --sab:#E39C95; --dom:#6CC3A3;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 64px}
+
+/* Hero: intarsio di marmo */
+.inlay{display:block;width:100%;height:56px}
+.hero{padding:26px 0 8px}
+.hero h1{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(2.6rem,9vw,3.6rem);line-height:1;margin:0 0 10px;letter-spacing:-.01em}
+.hero p{margin:0;color:var(--ink-soft);max-width:46ch}
+.countdown{margin-top:14px;display:inline-block;padding:6px 12px;border-radius:999px;background:var(--gold-soft);color:var(--ink);font-weight:600;font-size:.9rem}
+
+/* Tabs */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin:18px -18px 0;padding:10px 18px;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .92rem "Figtree",system-ui,sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--green);border-color:var(--green);color:var(--bg)}
+.tab:focus-visible,.check:focus-visible,.btn:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+
+.panel{display:none;padding-top:22px}
+.panel.on{display:block}
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+.panel h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:2rem;margin:0;line-height:1.1}
+.progress{font-size:.88rem;color:var(--ink-soft);white-space:nowrap}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:8px 0 18px}
+.bar span{display:block;height:100%;background:var(--pink);width:0;transition:width .3s}
+.intro{color:var(--ink-soft);margin:0 0 16px;font-size:.95rem}
+h3{font-size:1rem;font-weight:700;margin:26px 0 8px}
+
+/* Items */
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.check{appearance:none;-webkit-appearance:none;width:24px;height:24px;margin:2px 0 0;border:2px solid var(--ink-soft);border-radius:7px;cursor:pointer;display:grid;place-content:center;background:var(--surface)}
+.check::after{content:"";width:12px;height:7px;border-left:2.5px solid var(--bg);border-bottom:2.5px solid var(--bg);transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+.check:checked{background:var(--green);border-color:var(--green)}
+.check:checked::after{opacity:1}
+.top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.time{font-weight:700;font-variant-numeric:tabular-nums;color:var(--pink);min-width:3.2em}
+.title{font-weight:600}
+.note{margin:4px 0 0;color:var(--ink-soft);font-size:.93rem}
+.warn{margin:6px 0 0;font-size:.88rem;background:var(--pink-soft);padding:6px 10px;border-radius:8px;color:var(--ink)}
+.actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;text-decoration:none;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn svg{width:14px;height:14px}
+.item.done .title,.item.done .note{color:var(--done);text-decoration:line-through;text-decoration-thickness:1px}
+.item.done .time{color:var(--done)}
+.route{display:flex;width:100%;justify-content:center;margin:18px 0 0;padding:12px;background:var(--green);color:var(--bg);border-color:var(--green);font-size:.95rem}
+
+/* Box informativi */
+.box{margin-top:22px;padding:16px 18px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.box h3{margin:0 0 8px}
+.box p,.box li{font-size:.93rem;color:var(--ink-soft)}
+.box ul{margin:0;padding-left:18px}
+.box li{margin:4px 0}
+.box strong{color:var(--ink)}
+
+/* Mappa */
+.map-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px;overflow-x:auto}
+.map{display:block;width:100%;min-width:300px;height:auto}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.legend .tab{font-size:.85rem;padding:6px 12px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.reset{margin-top:36px;background:none;border:none;color:var(--ink-soft);text-decoration:underline;font:500 .88rem "Figtree",system-ui,sans-serif;cursor:pointer;padding:0}
+footer{margin-top:20px;font-size:.82rem;color:var(--ink-soft)}
+
+.versions{display:flex;margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.ver{flex:1;border:none;background:transparent;color:var(--ink-soft);font:600 .9rem "Figtree",system-ui,sans-serif;padding:9px 10px;border-radius:9px;cursor:pointer}
+.ver[aria-pressed="true"]{background:var(--pink);color:#fff}
+.ver:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.vernote{font-size:.85rem;color:var(--ink-soft);margin:8px 2px 0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--gold-soft);color:var(--gold);vertical-align:middle}
+.box ol{margin:0;padding-left:20px}
+.box ol li{margin:4px 0;font-size:.93rem;color:var(--ink-soft)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg class="inlay" viewBox="0 0 400 56" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <pattern id="marmo" width="56" height="56" patternUnits="userSpaceOnUse">
+      <rect width="56" height="56" fill="#F4F3EE"/>
+      <rect x="0" y="0" width="56" height="8" fill="#22453B"/>
+      <rect x="0" y="48" width="56" height="8" fill="#22453B"/>
+      <path d="M28 12 L44 28 L28 44 L12 28 Z" fill="#B5655F"/>
+      <path d="M28 19 L37 28 L28 37 L19 28 Z" fill="#F4F3EE"/>
+      <circle cx="28" cy="28" r="3.5" fill="#22453B"/>
+      <rect x="0" y="12" width="4" height="32" fill="#22453B"/>
+      <rect x="52" y="12" width="4" height="32" fill="#22453B"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="56" fill="url(#marmo)"/>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>Firenze in 40 ore</h1>
+    <p>20–22 novembre 2026, in cinque. Spunta man mano: i progressi restano salvati su questo telefono.</p>
+    <span class="countdown" id="countdown"></span>
+    <div class="versions" role="group" aria-label="Versione del piano">
+      <button class="ver" data-ver="upd" aria-pressed="true">Piano aggiornato</button>
+      <button class="ver" data-ver="orig" aria-pressed="false">Piano originale</button>
+    </div>
+    <p class="vernote" id="vernote"></p>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="panels"></main>
+
+  <button class="reset" id="reset">Azzera tutte le spunte</button>
+  <footer>Orari verificati a ottobre 2026. Torre di Arnolfo, Palazzo Vecchio, San Miniato e i chioschi possono variare: ricontrolla la settimana prima.</footer>
+</div>
+
+<script>
+const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
+const LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+
+const gmaps = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+const groute = arr => {
+  const o = arr[0], d = arr[arr.length-1], w = arr.slice(1,-1);
+  return "https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=" + encodeURIComponent(o) +
+    "&destination=" + encodeURIComponent(d) + (w.length ? "&waypoints=" + encodeURIComponent(w.join("|")) : "");
+};
+const HOTEL = "Hotel Angelica, Via Fiume 11, Firenze";
+
+const VALIGIA = { h:"In valigia", items:[
+  {id:"v1", title:"Biglietti salvati offline sul telefono", note:"QR code scaricati, non solo nelle email."},
+  {id:"v2", title:"Documento d’identità", note:"I biglietti nominativi possono essere controllati."},
+  {id:"v3", title:"Scarpe comode già rodate", note:"Sabato si camminano circa 8 km."},
+  {id:"v4", title:"Ombrello pieghevole o giacca impermeabile", note:"A novembre la pioggia è probabile."},
+  {id:"v5", title:"Powerbank", note:"Mappe e biglietti scaricano la batteria in fretta."},
+  {id:"v6", title:"Zaino piccolo", note:"Per Duomo e monumenti gli zaini vanno lasciati al guardaroba di Piazza Duomo 38/r."}
+]};
+
+/* ---------- PIANO AGGIORNATO ---------- */
+const UPD = [
+  { id:"prep", tab:"Prima di partire", title:"Prima di partire",
+    intro:"Prima la Cupola e il Corridoio Vasariano: la Cupola riapre il 21 dopo la manutenzione, e il 20 è l’ultima sera della stagione per il Corridoio.",
+    groups:[
+      { h:"Da prenotare subito", items:[
+        {id:"up1", n:1, title:"Cupola, sabato 21 ore 11:15", note:"Solo per chi sale. Brunelleschi Pass per chi sale, Ghiberti Pass per chi non sale. Se l’11:15 è esaurito va bene uno slot tra le 11:00 e le 11:45.", link:["Biglietti Duomo","https://tickets.duomo.firenze.it"]},
+        {id:"up2", n:1, title:"Corridoio Vasariano serale, venerdì 20 ore 21:50", note:"Ultimo slot dell’ultima sera della stagione. Cinque biglietti in un’unica prenotazione: è il massimo consentito. Non serve il biglietto degli Uffizi.", link:["Sito Uffizi","https://www.uffizi.it"]},
+        {id:"up3", n:1, title:"Accademia, sabato 21 ore 8:30", note:"Spostata dalla domenica al sabato.", link:["Sito Accademia","https://www.galleriaaccademiafirenze.it"]},
+        {id:"up4", n:1, title:"Uffizi, domenica 22 ore 8:45", note:"Spostati dal sabato alla domenica. Uscita entro le 11:30.", link:["Sito Uffizi","https://www.uffizi.it"]},
+        {id:"up5", n:1, title:"Torre di Arnolfo sabato ore 13:30, Museo di Palazzo Vecchio sabato ore 17:45", note:"Due biglietti separati, in due momenti diversi della giornata.", link:["Musei Civici","https://ticketsmuseums.comune.fi.it"]},
+        {id:"up6", n:1, title:"Cena con bistecca, sabato 21 ore 19:30", note:"Vicino alla Signoria, tavolo per 5. Due bistecche da circa 1,2 kg bastano per tutti."}
+      ]},
+      { h:"Hotel Angelica, Via Fiume 11", items:[
+        {id:"uh1", n:1, title:"Email per il check-in tardivo", note:"La reception segnala check-in fino alle 17. Arrivate scaglionati, l’ultimo verso le 20:10: chiedete chiavi per tutti al primo arrivato o un codice.", map:HOTEL},
+        {id:"uh2", n:1, title:"Bagagli in hotel domenica fino alle 15:20", note:"Check-out prima delle 8:10. Ritiro alle 12:35 per chi parte in bus, alle 15:20 per chi prende il treno delle 16."},
+        {id:"uh3", n:1, title:"Conferma della colazione dalle 7:30", note:"Sabato e domenica tutto il piano parte da lì."}
+      ]},
+      { h:"La settimana prima", items:[
+        {id:"uw1", n:1, title:"Orari invernali di Torre e Palazzo Vecchio", note:"Le fonti non concordano sulla Torre. Palazzo Vecchio può chiudere per eventi del Comune."},
+        {id:"uw2", title:"Meteo di sabato", note:"Se piove la Torre chiude: Museo dell’Opera del Duomo al posto del Piazzale."},
+        {id:"uw3", n:1, title:"Orario del treno dell’ultimo arrivo", note:"Il piano presume arrivo a Santa Maria Novella alle 20:04. Se arriva in bus a Villa Costanza, aggiungete circa 30 minuti."},
+        {id:"uw4", n:1, title:"Biglietto del tram T1 per chi parte domenica", note:"Da Alamanni a Villa Costanza, circa 22 minuti. Bus alle 13:40."},
+        {id:"uw5", n:1, title:"Chi sale in Cupola e chi no", note:"Serve per comprare il pass giusto a ognuno."}
+      ]},
+      VALIGIA
+    ]
+  },
+  { id:"ven", tab:"Ven 20", title:"Venerdì 20", intro:"Arrivi scaglionati, schiacciata al volo e il passaggio segreto dei Medici sopra Ponte Vecchio.",
+    route:[HOTEL,"All’Antico Vinaio, Via dei Neri, Firenze","Galleria degli Uffizi, Firenze","Piazza Santo Spirito, Firenze",HOTEL],
+    groups:[{ items:[
+      {id:"uf1", time:"17:30", title:"Check-in per chi arriva prima", note:"Ritirate le chiavi anche per gli altri, se l’hotel lo consente.", map:HOTEL},
+      {id:"uf2", n:1, time:"17:45", title:"Cappelle Medicee, facoltativo", note:"Sagrestia Nuova di Michelangelo, a 5 minuti dall’hotel. Ultimo ingresso alle 18:10: solo per chi è già arrivato.", map:"Cappelle Medicee, Firenze"},
+      {id:"uf3", time:"18:30", title:"Duomo, Signoria e Ponte Vecchio illuminati", note:"Per chi c’è già. Esterni e piazze sempre accessibili.", map:"Piazza del Duomo, Firenze"},
+      {id:"uf4", n:1, time:"20:04", title:"Arriva l’ultimo a Santa Maria Novella", note:"Zaino in hotel (300 metri), poi taxi fino al Lungarno vicino a Via dei Neri: risparmia 20 minuti a piedi.", map:"Stazione di Firenze Santa Maria Novella"},
+      {id:"uf5", n:1, time:"20:20", title:"Schiacciata All’Antico Vinaio", note:"Chi è già in centro si mette in fila e ordina anche per lui, così mangia appena arriva. La sera la coda è molto più corta che a pranzo. Controllate l’orario di chiusura.", map:"All’Antico Vinaio, Via dei Neri, Firenze"},
+      {id:"uf6", n:1, time:"21:35", title:"In fila all’ingresso degli Uffizi", note:"Da Via dei Neri sono 3 minuti a piedi.", map:"Galleria degli Uffizi, Firenze"},
+      {id:"uf7", n:1, time:"21:50", title:"Corridoio Vasariano", note:"Circa 45 minuti, sopra Ponte Vecchio verso Palazzo Pitti. Controllate dove si esce."},
+      {id:"uf8", time:"22:35", title:"Gelato o drink in Piazza Santo Spirito", note:"Ognuno come vuole.", map:"Piazza Santo Spirito, Firenze"},
+      {id:"uf9", n:1, time:"23:15", title:"Rientro in hotel", note:"25 minuti a piedi, oppure taxi per i più stanchi."}
+    ]}],
+    extra:{h:"Se il treno ritarda", html:"<p>Con un ritardo oltre i 30–40 minuti l’ultimo arrivato va <strong>direttamente agli Uffizi</strong>, e gli altri gli portano la schiacciata. Deve essere all’ingresso entro le 21:50, altrimenti perde il Corridoio. Gli altri quattro entrano comunque.</p>"}
+  },
+  { id:"sab", tab:"Sab 21", title:"Sabato 21", intro:"La giornata piena. Si parte subito dopo colazione, si sale prima di pranzo, si rallenta nel primo pomeriggio.",
+    route:[HOTEL,"Galleria dell’Accademia, Firenze","Battistero di San Giovanni, Firenze","Piazza de’ Cimatori, Firenze","Palazzo Vecchio, Firenze","Ponte Vecchio, Firenze","Via di San Niccolò, Firenze","Basilica di San Miniato al Monte, Firenze","Piazzale Michelangelo, Firenze","Palazzo Vecchio, Firenze"],
+    groups:[{ items:[
+      {id:"us1", time:"7:30", title:"Colazione in hotel", note:"Circa 40 minuti."},
+      {id:"us2", n:1, time:"8:15", title:"Partenza a piedi", note:"15 minuti fino all’Accademia."},
+      {id:"us3", n:1, time:"8:30", title:"Galleria dell’Accademia", note:"Il David e i Prigioni. Circa un’ora, con il museo ancora semivuoto.", map:"Galleria dell’Accademia, Firenze"},
+      {id:"us4", n:1, time:"9:40", title:"Guardaroba al 38/r e Battistero", note:"Il Battistero apre alle 8:30. Zaini da lasciare prima delle visite.", map:"Battistero di San Giovanni, Firenze"},
+      {id:"us5", n:1, time:"10:05", title:"In coda alla Cattedrale, visita 10:15–11:00", note:"Apre alle 10:15: arrivando prima la fila quasi sparisce. È l’unica occasione, domenica è chiusa ai turisti.", map:"Cattedrale di Santa Maria del Fiore, Firenze"},
+      {id:"us6", n:1, time:"11:15", title:"Cupola per chi sale, Museo dell’Opera per gli altri", note:"Cupola 463 gradini, a stomaco vuoto. Il Museo dell’Opera (Pietà Bandini, porte originali del Battistero) è incluso in tutti i pass.", map:"Cupola del Brunelleschi, Firenze"},
+      {id:"us7", n:1, time:"12:30", title:"Lampredotto all’Antico Trippaio", note:"Piazza de’ Cimatori, con qualche tavolino. Poi caffè seduti in Signoria. Se c’è fila: Trippaio del Porcellino, a 200 metri.", map:"L’Antico Trippaio, Piazza de’ Cimatori, Firenze"},
+      {id:"us8", n:1, time:"13:30", title:"Torre di Arnolfo", note:"223 gradini di pietra, vista sulla Cupola. Chiude con la pioggia. Chi ha fatto la Cupola ed è stanco può saltarla.", map:"Palazzo Vecchio, Firenze"},
+      {id:"us9", n:1, time:"14:15", title:"Oltrarno con calma", note:"Ponte Vecchio, Santo Spirito, botteghe. Il ritmo lo decidono i pigri.", map:"Piazza Santo Spirito, Firenze"},
+      {id:"us10", n:1, time:"15:30", title:"Salita da San Niccolò per le Rampe del Poggi", note:"30–35 minuti, in parte in salita.", map:"Rampe del Poggi, Firenze"},
+      {id:"us11", n:1, time:"16:05", title:"San Miniato al Monte", note:"Prima del Piazzale, non dopo: così resta tempo per Palazzo Vecchio.", map:"Basilica di San Miniato al Monte, Firenze"},
+      {id:"us12", time:"16:35", title:"Piazzale Michelangelo", note:"Tramonto verso le 16:50.", map:"Piazzale Michelangelo, Firenze"},
+      {id:"us13", n:1, time:"17:05", title:"Discesa verso la Signoria", note:"Si parte puntuali anche se la luce è ancora bella: 30–35 minuti."},
+      {id:"us14", n:1, time:"17:40", title:"Museo di Palazzo Vecchio", note:"Ultimo ingresso alle 18:00. Salone dei Cinquecento quasi vuoto.", map:"Palazzo Vecchio, Firenze"},
+      {id:"us15", time:"19:30", title:"Cena con bistecca", note:"Vicino alla Signoria. Ordinatela al sangue."}
+    ]}],
+    extra:{h:"Se siete stanchi, tagliate in quest’ordine", html:"<ol><li><strong>Museo di Palazzo Vecchio</strong>: la Torre l’avete già fatta. Cena anticipata.</li><li><strong>Battistero</strong>: si vede anche da fuori.</li><li><strong>Torre</strong> per chi ha già fatto la Cupola: panorama simile.</li></ol><p style=\"margin-top:10px\"><strong>Se piove</strong>: la Torre chiude. Al posto di Piazzale e San Miniato, Museo dell’Opera del Duomo (aperto fino alle 19, incluso nel pass).</p><div class=\"actions\"><a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\""+gmaps("Museo dell’Opera del Duomo, Firenze")+"\">"+PIN+"Museo dell’Opera</a></div>"}
+  },
+  { id:"dom", tab:"Dom 22", title:"Domenica 22", intro:"Uffizi con calma, pranzo vicino all’hotel. Alle 12:40 parte il primo, chi prende il treno delle 16 ha ancora Michelangelo e Masaccio a due passi dalla stazione.",
+    route:[HOTEL,"Galleria degli Uffizi, Firenze","Mercato Centrale, Firenze","Cappelle Medicee, Firenze","Basilica di Santa Maria Novella, Firenze",HOTEL,"Stazione di Firenze Santa Maria Novella"],
+    groups:[{ items:[
+      {id:"ud1", n:1, time:"7:30", title:"Colazione e check-out", note:"Valigie fatte il sabato sera, consegnate all’hotel."},
+      {id:"ud2", n:1, time:"8:10", title:"Partenza a piedi", note:"20 minuti fino agli Uffizi."},
+      {id:"ud3", n:1, time:"8:45", title:"Uffizi", note:"Arrivate alle 8:30 per i controlli. Botticelli, Leonardo, Tondo Doni, Caravaggio, terrazza. Uscita entro le 11:30.", map:"Galleria degli Uffizi, Firenze"},
+      {id:"ud4", n:1, time:"11:50", title:"Pranzo al Mercato Centrale", note:"Solo il piano superiore: quello di sotto la domenica è chiuso. A 4 minuti dall’hotel.", map:"Mercato Centrale, Firenze"},
+      {id:"ud5", n:1, time:"12:35", title:"Ritiro bagagli per chi parte in bus", map:HOTEL},
+      {id:"ud6", n:1, time:"12:40", title:"Primo amico: tram T1 verso Villa Costanza", note:"Fermata Alamanni, accanto alla stazione. Tram ogni 10 minuti circa, 22 minuti di viaggio. Bus alle 13:40.", map:"Alamanni Stazione Santa Maria Novella, tramvia, Firenze"},
+      {id:"ud7", n:1, time:"12:50", title:"Cappelle Medicee", note:"Sagrestia Nuova di Michelangelo, a 5 minuti dall’hotel. Aperte la domenica fino alle 18:50. Circa 45 minuti.", map:"Cappelle Medicee, Firenze"},
+      {id:"ud8", n:1, time:"13:55", title:"Basilica di Santa Maria Novella", note:"Domenica 13:00–17:00, biglietteria fino alle 16:00. Trinità di Masaccio, Cappella Tornabuoni, crocifisso di Giotto. Non saltate chiostri e Cappellone degli Spagnoli.", map:"Basilica di Santa Maria Novella, Firenze"},
+      {id:"ud9", n:1, time:"15:00", title:"Caffè seduti in Piazza Santa Maria Novella"},
+      {id:"ud10", n:1, time:"15:20", title:"Ritiro bagagli in hotel", map:HOTEL},
+      {id:"ud11", n:1, time:"15:35", title:"In stazione per il treno delle 16", note:"300 metri dall’hotel.", map:"Stazione di Firenze Santa Maria Novella"}
+    ]}],
+    extra:{h:"Da ricordare", html:"<p>La domenica la <strong>Cattedrale è chiusa ai turisti</strong> e la Cupola apre solo alle 12:45. Tutto il Duomo si fa sabato.</p>"}
+  },
+  { id:"map", tab:"Mappa", title:"Mappa", intro:"Schema del centro in scala. H è l’hotel. Scegli il giorno per vedere il percorso nell’ordine giusto." }
+];
+
+/* ---------- PIANO ORIGINALE ---------- */
+const ORIG = [
+  { id:"prep", tab:"Prima di partire", title:"Prima di partire",
+    intro:"La prima versione del piano, conservata per confronto.",
+    groups:[
+      { h:"Prenotazioni", items:[
+        {id:"p1", title:"Slot Cupola, sabato 21 verso le 11:30", note:"Brunelleschi Pass per chi sale in Cupola, Giotto Pass per il Campanile, Ghiberti Pass per chi non sale.", link:["Biglietti Duomo","https://tickets.duomo.firenze.it"]},
+        {id:"p2", title:"Uffizi, sabato 21 ore 8:15", note:"Primo ingresso: museo vuoto per almeno un’ora.", link:["Sito Uffizi","https://www.uffizi.it"]},
+        {id:"p3", title:"Cena con bistecca, sabato 21 ore 20:30", note:"Tavolo per 5."},
+        {id:"p4", title:"Galleria dell’Accademia, domenica 22 ore 8:15", note:"Visita di circa un’ora.", link:["Sito Accademia","https://www.galleriaaccademiafirenze.it"]},
+        {id:"p5", title:"Cena di venerdì 20 in Oltrarno", note:"San Frediano o Santo Spirito, per le 20:30."},
+        {id:"p6", title:"Deposito bagagli per domenica mattina", note:"In alloggio o vicino a Santa Maria Novella."}
+      ]},
+      { h:"La settimana prima", items:[
+        {id:"p7", title:"Orario dei vespri a San Miniato", link:["Sito San Miniato","https://www.sanminiatoalmonte.it"]},
+        {id:"p8", title:"Meteo di sabato", note:"Se piove: Palazzo Vecchio al posto del Piazzale."},
+        {id:"p9", title:"Avvisi di Palazzo Vecchio", note:"Può chiudere per eventi del Comune."}
+      ]},
+      VALIGIA
+    ]
+  },
+  { id:"ven", tab:"Ven 20", title:"Venerdì 20", intro:"Serata leggera: centro illuminato e cena.",
+    route:["Cattedrale di Santa Maria del Fiore, Firenze","Piazza della Signoria, Firenze","Ponte Vecchio, Firenze","Piazza Santo Spirito, Firenze"],
+    groups:[{ items:[
+      {id:"f1", time:"18:00", title:"Check-in"},
+      {id:"f2", time:"19:00", title:"Duomo, Signoria e Ponte Vecchio", map:"Piazza del Duomo, Firenze"},
+      {id:"f3", time:"20:30", title:"Cena in Oltrarno", map:"San Frediano, Firenze"},
+      {id:"f4", time:"22:15", title:"Dopocena in Piazza Santo Spirito", map:"Piazza Santo Spirito, Firenze"}
+    ]}]
+  },
+  { id:"sab", tab:"Sab 21", title:"Sabato 21", intro:"La prima versione del sabato.",
+    route:["Galleria degli Uffizi, Firenze","Cattedrale di Santa Maria del Fiore, Firenze","Mercato Centrale, Firenze","Piazzale Michelangelo, Firenze","Basilica di San Miniato al Monte, Firenze","Via di San Niccolò, Firenze"],
+    groups:[{ items:[
+      {id:"s1", time:"7:45", title:"Colazione veloce"},
+      {id:"s2", time:"8:15", title:"Uffizi, percorso mirato", map:"Galleria degli Uffizi, Firenze"},
+      {id:"s3", time:"10:45", title:"Interno della Cattedrale", map:"Cattedrale di Santa Maria del Fiore, Firenze"},
+      {id:"s4", time:"11:30", title:"Salita in Cupola o Campanile", map:"Cupola del Brunelleschi, Firenze"},
+      {id:"s5", time:"13:00", title:"Lampredotto da Nerbone", map:"Da Nerbone, Mercato Centrale, Firenze"},
+      {id:"s6", time:"14:15", title:"Riposo in alloggio"},
+      {id:"s7", time:"16:00", title:"Verso Piazzale Michelangelo", map:"Piazzale Michelangelo, Firenze"},
+      {id:"s8", time:"17:15", title:"San Miniato al Monte", map:"Basilica di San Miniato al Monte, Firenze"},
+      {id:"s9", time:"18:15", title:"Aperitivo a San Niccolò", map:"Via di San Niccolò, Firenze"},
+      {id:"s10", time:"20:30", title:"Cena con bistecca"}
+    ]}]
+  },
+  { id:"dom", tab:"Dom 22", title:"Domenica 22", intro:"La prima versione della domenica.",
+    route:["Galleria dell’Accademia, Firenze","Battistero di San Giovanni, Firenze","Mercato Centrale, Firenze","Stazione di Firenze Santa Maria Novella"],
+    groups:[{ items:[
+      {id:"d1", time:"8:00", title:"Check-out e bagagli in deposito"},
+      {id:"d2", time:"8:15", title:"Galleria dell’Accademia", map:"Galleria dell’Accademia, Firenze"},
+      {id:"d3", time:"9:45", title:"Battistero e Museo dell’Opera", map:"Battistero di San Giovanni, Firenze"},
+      {id:"d4", time:"11:45", title:"Pranzo al Mercato Centrale", map:"Mercato Centrale, Firenze"},
+      {id:"d5", time:"13:00", title:"Verso la stazione", map:"Stazione di Firenze Santa Maria Novella"}
+    ]}]
+  },
+  { id:"map", tab:"Mappa", title:"Mappa", intro:"Schema del centro in scala, percorsi della prima versione." }
+];
+
+/* Coordinate proiettate da lat/lng reali, scala comune */
+const P = {
+  hotel:[99,65,"Hotel"], smn:[62,43,"Stazione e tram"], mercato:[126,45,"Mercato Centrale"], cappelle:[131,64,"Cappelle Medicee"],
+  accademia:[196,38,"Accademia"], duomo:[161,101,"Battistero e Duomo"], signoria:[159,161,"Cimatori e Palazzo Vecchio"],
+  uffizi:[152,192,"Uffizi"], vinaio:[170,180,"Antico Vinaio"], ponte:[125,189,"Ponte Vecchio"], pitti:[87,239,"Palazzo Pitti"],
+  spirito:[61,215,"Santo Spirito"], smnbas:[79,91,"Santa Maria Novella"], niccolo:[217,258,"San Niccolò"], piazzale:[273,276,"Piazzale"], miniato:[273,336,"San Miniato"]
+};
+const ROUTES = {
+  upd:{
+    ven:{c:"--ven", start:"hotel", s:["cappelle","duomo","vinaio","uffizi","pitti","spirito"], end:"hotel"},
+    sab:{c:"--sab", start:"hotel", s:["accademia","duomo","signoria","ponte","niccolo","miniato","piazzale"], end:"signoria"},
+    dom:{c:"--dom", start:"hotel", s:["uffizi","mercato","cappelle","smnbas","smn"]}
+  },
+  orig:{
+    ven:{c:"--ven", s:["duomo","signoria","ponte","spirito"]},
+    sab:{c:"--sab", s:["uffizi","duomo","mercato","piazzale","miniato","niccolo"]},
+    dom:{c:"--dom", s:["accademia","duomo","mercato","smn"]}
+  }
+};
+const SIDE = {smnbas:"b", spirito:"b", smn:"t", ponte:"l", mercato:"l", niccolo:"l", uffizi:"l", pitti:"l", hotel:"b"};
+
+let state = {};
+try { state = JSON.parse(localStorage.getItem("firenze-checklist-v1") || "{}") || {}; } catch(e){ state = {}; }
+const save = () => { try { localStorage.setItem("firenze-checklist-v1", JSON.stringify(state)); } catch(e){} };
+let ver = "upd";
+try { ver = localStorage.getItem("firenze-ver") || "upd"; } catch(e){}
+let mapDay = null;
+const data = () => ver === "upd" ? UPD : ORIG;
+
+function itemHTML(it){
+  const done = !!state[it.id];
+  let acts = "";
+  if (it.map) acts += `<a class="btn" target="_blank" rel="noopener" href="${gmaps(it.map)}">${PIN}Apri in Maps</a>`;
+  if (it.link) acts += `<a class="btn" target="_blank" rel="noopener" href="${it.link[1]}">${LINK}${it.link[0]}</a>`;
+  return `<li class="item${done?" done":""}" data-id="${it.id}">
+    <input type="checkbox" class="check" id="c-${it.id}" ${done?"checked":""} aria-label="${it.title.replace(/"/g,"&quot;")}">
+    <div>
+      <label class="top" for="c-${it.id}">${it.time?`<span class="time">${it.time}</span>`:""}<span class="title">${it.title}</span>${it.n&&ver==="upd"?` <span class="tag">Nuovo</span>`:""}</label>
+      ${it.note?`<p class="note">${it.note}</p>`:""}
+      ${it.warn?`<p class="warn">${it.warn}</p>`:""}
+      ${acts?`<div class="actions">${acts}</div>`:""}
+    </div></li>`;
+}
+
+function label(k, x, y){
+  const p = P[k], side = SIDE[k] || "r";
+  let tx = x + 14, ty = y + 4, anc = "start";
+  if (side === "l"){ tx = x - 14; anc = "end"; }
+  if (side === "t"){ tx = x; ty = y - 15; anc = "middle"; }
+  if (side === "b"){ tx = x; ty = y + 24; anc = "middle"; }
+  return `<text x="${tx}" y="${ty}" text-anchor="${anc}" font-size="11.5" font-weight="600" fill="var(--ink)" font-family="Figtree,system-ui,sans-serif" paint-order="stroke" stroke="var(--map-land)" stroke-width="3">${p[2]}</text>`;
+}
+
+function mapSVG(day){
+  const r = ROUTES[ver][day];
+  const col = `var(${r.c})`;
+  const seq = [].concat(r.start?[r.start]:[], r.s, r.end?[r.end]:[]);
+  const line = seq.map(k=>P[k][0]+","+P[k][1]).join(" ");
+  const used = new Set(seq);
+  const others = Object.keys(P).filter(k=>!used.has(k) && k!=="hotel").map(k=>{
+    const p=P[k]; return `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--ink-soft)" opacity=".35"/>`;
+  }).join("");
+  const h = P.hotel;
+  const hotelMark = ver==="upd" ? `<g><rect x="${h[0]-9}" y="${h[1]-9}" width="18" height="18" rx="4" fill="var(--green)" stroke="var(--surface)" stroke-width="2"/>
+    <text x="${h[0]}" y="${h[1]+4}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--surface)" font-family="Figtree,system-ui,sans-serif">H</text>${label("hotel",h[0],h[1])}</g>` : "";
+  const stops = r.s.map((k,i)=>{
+    const p=P[k];
+    return `<g><circle cx="${p[0]}" cy="${p[1]}" r="10" fill="${col}" stroke="var(--surface)" stroke-width="2"/>
+      <text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--surface)" font-family="Figtree,system-ui,sans-serif">${i+1}</text>${label(k,p[0],p[1])}</g>`;
+  }).join("");
+  return `<svg class="map" viewBox="0 0 360 370" role="img" aria-label="Percorso del giorno">
+    <rect width="360" height="370" fill="var(--map-land)"/>
+    <path d="M0 140 L68 157 L125 189 L192 215 L248 240 L300 261 L360 283 L360 370 L0 370 Z" fill="var(--map-oltr)"/>
+    <path d="M0 134 L68 151 L125 189 L192 215 L248 240 L300 261 L360 283" fill="none" stroke="var(--map-water)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="22" y="132" font-size="11" font-style="italic" fill="var(--ink-soft)" font-family="Instrument Serif,Georgia,serif" transform="rotate(13 22 132)">Arno</text>
+    <text x="20" y="300" font-size="15" fill="var(--ink-soft)" font-family="Instrument Serif,Georgia,serif" opacity=".8">Oltrarno</text>
+    <g font-family="Figtree,system-ui,sans-serif" font-size="10" fill="var(--ink-soft)">
+      <line x1="20" y1="352" x2="97" y2="352" stroke="var(--ink-soft)" stroke-width="2"/>
+      <text x="20" y="346">500 m</text>
+      <text x="340" y="22" text-anchor="middle" font-weight="700">N</text>
+      <path d="M340 26 L335 40 L340 36 L345 40 Z" fill="var(--ink-soft)"/>
+    </g>
+    ${others}
+    <polyline points="${line}" fill="none" stroke="${col}" stroke-width="3" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${hotelMark}${stops}
+  </svg>`;
+}
+
+function render(){
+  const D = data();
+  const tabs = document.getElementById("tabs"), panels = document.getElementById("panels");
+  tabs.innerHTML = D.map(d=>`<button class="tab" role="tab" id="t-${d.id}" aria-controls="p-${d.id}" aria-selected="false">${d.tab}</button>`).join("");
+  panels.innerHTML = D.map(d=>{
+    let body = "";
+    if (d.id==="map"){
+      body = `<div class="legend" id="mapdays">
+        ${["ven","sab","dom"].map(k=>`<button class="tab" data-day="${k}" aria-pressed="false"><span class="dot" style="background:var(${ROUTES[ver][k].c})"></span>${{ven:"Venerdì",sab:"Sabato",dom:"Domenica"}[k]}</button>`).join("")}
+      </div><div class="map-wrap" id="mapbox"></div>
+      <a class="btn route" id="maproute" target="_blank" rel="noopener" href="#">${PIN}Apri il percorso a piedi in Google Maps</a>`;
+    } else {
+      body = d.groups.map(g=>`${g.h?`<h3>${g.h}</h3>`:""}<ul class="list">${g.items.map(itemHTML).join("")}</ul>`).join("");
+      if (d.route) body += `<a class="btn route" target="_blank" rel="noopener" href="${groute(d.route)}">${PIN}Percorso a piedi del giorno in Google Maps</a>`;
+      if (d.extra) body += `<div class="box"><h3>${d.extra.h}</h3>${d.extra.html}</div>`;
+    }
+    const prog = d.id==="map" ? "" : `<span class="progress" id="pg-${d.id}"></span>`;
+    const bar = d.id==="map" ? '<div style="height:12px"></div>' : `<div class="bar"><span id="br-${d.id}"></span></div>`;
+    return `<section class="panel" role="tabpanel" id="p-${d.id}" aria-labelledby="t-${d.id}">
+      <div class="panel-head"><h2>${d.title}</h2>${prog}</div>${bar}
+      <p class="intro">${d.intro}</p>${body}</section>`;
+  }).join("");
+
+  tabs.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>show(b.id.slice(2))));
+  panels.querySelectorAll(".check").forEach(c=>c.addEventListener("change",e=>{
+    const li = e.target.closest(".item"); const id = li.dataset.id;
+    if (e.target.checked) state[id]=1; else delete state[id];
+    li.classList.toggle("done", e.target.checked); save(); progress();
+  }));
+  document.querySelectorAll("#mapdays .tab").forEach(b=>b.addEventListener("click",()=>showMap(b.dataset.day)));
+  document.querySelectorAll(".ver").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ver===ver));
+  document.getElementById("vernote").textContent = ver==="upd"
+    ? "Le voci con l’etichetta Nuovo sono state aggiunte o spostate rispetto al piano originale."
+    : "Versione iniziale, conservata per confronto. Gli orari validi sono nel piano aggiornato.";
+  progress();
+}
+
+function progress(){
+  data().filter(d=>d.groups).forEach(d=>{
+    const ids = d.groups.flatMap(g=>g.items.map(i=>i.id));
+    const n = ids.filter(i=>state[i]).length;
+    const pg = document.getElementById("pg-"+d.id), br = document.getElementById("br-"+d.id);
+    if (pg) pg.textContent = n===ids.length ? "Tutto fatto" : `${n} su ${ids.length}`;
+    if (br) br.style.width = (n/ids.length*100)+"%";
+  });
+}
+
+function show(id){
+  data().forEach(d=>{
+    document.getElementById("p-"+d.id).classList.toggle("on", d.id===id);
+    document.getElementById("t-"+d.id).setAttribute("aria-selected", d.id===id);
+  });
+  if (id==="map") showMap(mapDay || currentDay() || "sab");
+  try { sessionStorage.setItem("firenze-tab", id); } catch(e){}
+}
+
+function showMap(day){
+  mapDay = day;
+  document.getElementById("mapbox").innerHTML = mapSVG(day);
+  document.querySelectorAll("#mapdays .tab").forEach(b=>{
+    const on = b.dataset.day===day; b.setAttribute("aria-pressed", on); b.setAttribute("aria-selected", on);
+  });
+  const d = data().find(x=>x.id===day);
+  document.getElementById("maproute").href = groute(d.route);
+}
+
+function currentDay(){
+  const t = new Date(); const y=t.getFullYear(), m=t.getMonth(), dd=t.getDate();
+  if (y===2026 && m===10){ if (dd===20) return "ven"; if (dd===21) return "sab"; if (dd===22) return "dom"; }
+  return null;
+}
+function currentTab(){
+  const on = document.querySelector(".panel.on"); return on ? on.id.slice(2) : null;
+}
+
+function countdown(){
+  const el = document.getElementById("countdown");
+  const start = new Date(2026,10,20); const now = new Date(); now.setHours(0,0,0,0);
+  const days = Math.round((start-now)/86400000);
+  if (days>1) el.textContent = `Mancano ${days} giorni`;
+  else if (days===1) el.textContent = "Si parte domani";
+  else if (days>=-2) el.textContent = "Siete a Firenze";
+  else el.style.display="none";
+}
+
+document.querySelectorAll(".ver").forEach(b=>b.addEventListener("click",()=>{
+  const keep = currentTab() || "prep";
+  ver = b.dataset.ver;
+  try { localStorage.setItem("firenze-ver", ver); } catch(e){}
+  render(); show(keep);
+}));
+
+document.getElementById("reset").addEventListener("click",()=>{
+  if (confirm("Vuoi togliere tutte le spunte?")){ const keep = currentTab() || "prep"; state={}; save(); render(); show(keep); }
+});
+
+render();
+let startTab = currentDay();
+if (!startTab){ try { startTab = sessionStorage.getItem("firenze-tab"); } catch(e){} }
+show(startTab || "prep");
+countdown();
+</script>
+
+</body>
+</html>
