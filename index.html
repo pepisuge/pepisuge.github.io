@@ -103,6 +103,9 @@ footer{margin-top:20px;font-size:.82rem;color:var(--ink-soft)}
 .ver:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .vernote{font-size:.85rem;color:var(--ink-soft);margin:8px 2px 0}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--gold-soft);color:var(--gold);vertical-align:middle}
+.tag.obb{background:var(--pink);color:#fff}
+.tag.cons{background:var(--gold-soft);color:var(--gold)}
+.tag.no{background:var(--line);color:var(--ink-soft)}
 .box ol{margin:0;padding-left:20px}
 .box ol li{margin:4px 0;font-size:.93rem;color:var(--ink-soft)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -132,8 +135,9 @@ footer{margin-top:20px;font-size:.82rem;color:var(--ink-soft)}
     <p>20–22 novembre 2026, in cinque. Spunta man mano: i progressi restano salvati su questo telefono.</p>
     <span class="countdown" id="countdown"></span>
     <div class="versions" role="group" aria-label="Versione del piano">
-      <button class="ver" data-ver="upd" aria-pressed="true">Piano aggiornato</button>
-      <button class="ver" data-ver="orig" aria-pressed="false">Piano originale</button>
+      <button class="ver" data-ver="def" aria-pressed="true">Piano definitivo</button>
+      <button class="ver" data-ver="upd" aria-pressed="false">Aggiornato</button>
+      <button class="ver" data-ver="orig" aria-pressed="false">Originale</button>
     </div>
     <p class="vernote" id="vernote"></p>
   </header>
@@ -308,14 +312,97 @@ const ORIG = [
   { id:"map", tab:"Mappa", title:"Mappa", intro:"Schema del centro in scala, percorsi della prima versione." }
 ];
 
+
+/* ---------- PIANO DEFINITIVO ---------- */
+const DEF = [
+  { id:"prep", tab:"Prima di partire", title:"Prima di partire",
+    intro:"Ogni voce ha un’etichetta: Obbligatoria, Consigliata o Non serve. Prenotate in quest’ordine, partendo dalla Cupola.",
+    groups:[
+      { h:"Prenotazione obbligatoria", items:[
+        {id:"dp1", d:1, b:"obb", title:"Cupola, sabato 21 ore 12:00", note:"Brunelleschi Pass, solo per chi sale. Prendete lo slot delle 12:00 esatte: ogni ritardo si scarica su pranzo e tramonto. Il pass vale 3 giorni e include anche Battistero e Museo dell’Opera.", link:["Biglietti Duomo","https://tickets.duomo.firenze.it"]},
+        {id:"dp3", d:1, b:"obb", title:"Cena con bistecca, sabato 21 ore 19:30", note:"Non è un obbligo formale, ma il sabato sera un tavolo per 5 senza prenotazione è quasi impossibile. Vicino alla Signoria."}
+      ]},
+      { h:"Prenotazione consigliata", items:[
+        {id:"up3", b:"cons", title:"Accademia, sabato 21 ore 8:30", note:"Il biglietto si può comprare anche in cassa, ma con la prenotazione entrate all’orario scelto senza fila.", link:["Sito Accademia","https://www.galleriaaccademiafirenze.it"]},
+        {id:"up4", b:"cons", title:"Uffizi, domenica 22 ore 8:45", note:"Con la prenotazione entrate all’orario esatto: indispensabile per uscire entro le 11:30.", link:["Sito Uffizi","https://www.uffizi.it"]},
+        {id:"dp6", d:1, b:"cons", title:"Museo di Palazzo Vecchio, sabato ore 17:45", note:"Ultimo ingresso alle 18:00: con il biglietto già in tasca non perdete minuti in cassa.", link:["Musei Civici","https://ticketsmuseums.comune.fi.it"]},
+        {id:"dp7", d:1, b:"cons", title:"Pass del Duomo per chi non sale in Cupola", note:"Ghiberti Pass: Battistero, Museo dell’Opera e Santa Reparata, senza orario fisso. Comprarlo online evita la fila in biglietteria.", link:["Biglietti Duomo","https://tickets.duomo.firenze.it"]}
+      ]},
+      { h:"Nessuna prenotazione", items:[
+        {id:"dn1", d:1, b:"no", title:"Museo Galileo, sabato", note:"Biglietto in cassa, circa 14 €. Aperto tutti i giorni 9:30–18:00, il martedì fino alle 13."},
+        {id:"dn2", d:1, b:"no", title:"Cappelle Medicee, venerdì o domenica", note:"Biglietto in cassa. Domenica aperte fino alle 18:50."},
+        {id:"dn3", d:1, b:"no", title:"Basilica di Santa Maria Novella, domenica", note:"Biglietto in cassa. Domenica 13:00–17:00, biglietteria fino alle 16:00."},
+        {id:"dn4", d:1, b:"no", title:"Cattedrale, San Miniato, Piazzale Michelangelo", note:"Ingresso libero o gratuito."},
+        {id:"dn5", d:1, b:"no", title:"Antico Vinaio e Antico Trippaio", note:"Solo fila. Controllate l’orario serale dell’Antico Vinaio."}
+      ]},
+      { h:"Hotel Angelica, Via Fiume 11", items:[
+        {id:"uh1", title:"Email per il check-in tardivo", note:"La reception segnala check-in fino alle 17. Arrivate scaglionati, l’ultimo verso le 20:10: chiedete chiavi per tutti al primo arrivato o un codice.", map:HOTEL},
+        {id:"uh2", title:"Bagagli in hotel domenica fino alle 15:20", note:"Check-out prima delle 8:10. Ritiro alle 12:35 per chi parte in bus, alle 15:20 per chi prende il treno delle 16."},
+        {id:"uh3", title:"Conferma della colazione dalle 7:30", note:"Sabato e domenica tutto il piano parte da lì."}
+      ]},
+      { h:"La settimana prima", items:[
+        {id:"dw1", d:1, title:"Avvisi di Palazzo Vecchio", note:"È la sede del Comune e può chiudere per eventi istituzionali."},
+        {id:"dw2", d:1, title:"Meteo di sabato", note:"Se piove, al posto di Piazzale e San Miniato: Museo dell’Opera (fino alle 19, incluso nel pass) o Museo Galileo per chi non l’ha visto."},
+        {id:"uw3", title:"Orario del treno dell’ultimo arrivo", note:"Il piano presume arrivo a Santa Maria Novella alle 20:04."},
+        {id:"uw4", title:"Biglietto del tram T1 per chi parte domenica", note:"Da Alamanni a Villa Costanza, circa 22 minuti. Bus alle 13:40."},
+        {id:"uw5", title:"Chi sale in Cupola e chi no", note:"Serve per comprare il pass giusto a ognuno."}
+      ]},
+      VALIGIA
+    ]
+  },
+  { id:"ven", tab:"Ven 20", title:"Venerdì 20", intro:"Serata morbida: arrivi con calma, schiacciata e centro illuminato. Nessun orario fisso.",
+    route:[HOTEL,"All’Antico Vinaio, Via dei Neri, Firenze","Piazza della Signoria, Firenze","Ponte Vecchio, Firenze","Piazza Santo Spirito, Firenze",HOTEL],
+    groups:[{ items:[
+      {id:"uf1", time:"17:30", title:"Check-in per chi arriva prima", note:"Ritirate le chiavi anche per gli altri, se l’hotel lo consente.", map:HOTEL},
+      {id:"uf2", time:"17:45", title:"Cappelle Medicee, facoltativo", note:"Sagrestia Nuova di Michelangelo, a 5 minuti dall’hotel. Ultimo ingresso alle 18:10: solo per chi è già arrivato.", map:"Cappelle Medicee, Firenze"},
+      {id:"uf3", time:"18:30", title:"Duomo e centro illuminati", note:"Per chi c’è già. Esterni e piazze sempre accessibili.", map:"Piazza del Duomo, Firenze"},
+      {id:"dv1", d:1, time:"20:04", title:"Arriva l’ultimo a Santa Maria Novella", note:"Zaino in hotel (300 metri). Nessuna fretta: 20 minuti a piedi passando dal Duomo illuminato, oppure taxi per chi è stanco.", map:"Stazione di Firenze Santa Maria Novella"},
+      {id:"dv2", d:1, time:"20:45", title:"Schiacciata All’Antico Vinaio", note:"Via dei Neri. La sera la coda è più corta che a pranzo, e chi arriva prima ordina per tutti. Controllate l’orario di chiusura. Se preferite sedervi, l’alternativa è una trattoria vicino all’hotel alle 20:30.", map:"All’Antico Vinaio, Via dei Neri, Firenze"},
+      {id:"dv3", d:1, time:"21:30", title:"Signoria e Ponte Vecchio di sera", note:"A 5 minuti dall’Antico Vinaio.", map:"Ponte Vecchio, Firenze"},
+      {id:"dv4", d:1, time:"22:00", title:"Gelato o drink in Piazza Santo Spirito", note:"Ognuno come vuole.", map:"Piazza Santo Spirito, Firenze"},
+      {id:"dv5", d:1, time:"23:00", title:"Rientro in hotel", note:"25 minuti a piedi, oppure taxi. Sabato colazione alle 7:30."}
+    ]}],
+    extra:{h:"Corridoio Vasariano", html:"<p>La visita serale del 20 non è disponibile, quindi è stata tolta. Di giorno serve il biglietto combinato con gli Uffizi e uno slot almeno 2 ore dopo l’ingresso: con le partenze di domenica non ci sta.</p>"}
+  },
+  { id:"sab", tab:"Sab 21", title:"Sabato 21", intro:"Cupola a mezzogiorno, Museo Galileo al posto della Torre, tramonto e Palazzo Vecchio la sera.",
+    route:[HOTEL,"Galleria dell’Accademia, Firenze","Battistero di San Giovanni, Firenze","Piazza de’ Cimatori, Firenze","Museo Galileo, Firenze","Ponte Vecchio, Firenze","Via di San Niccolò, Firenze","Basilica di San Miniato al Monte, Firenze","Piazzale Michelangelo, Firenze","Palazzo Vecchio, Firenze"],
+    groups:[{ items:[
+      {id:"us1", time:"7:30", title:"Colazione in hotel", note:"Circa 40 minuti."},
+      {id:"us2", time:"8:15", title:"Partenza a piedi", note:"15 minuti fino all’Accademia."},
+      {id:"us3", time:"8:30", title:"Galleria dell’Accademia", note:"Il David e i Prigioni. Circa un’ora.", map:"Galleria dell’Accademia, Firenze"},
+      {id:"us4", time:"9:40", title:"Guardaroba al 38/r e Battistero", note:"Zaini da lasciare prima delle visite.", map:"Battistero di San Giovanni, Firenze"},
+      {id:"us5", time:"10:05", title:"In coda alla Cattedrale, visita 10:15–11:00", note:"Arrivando prima dell’apertura la fila quasi sparisce. Domenica è chiusa ai turisti.", map:"Cattedrale di Santa Maria del Fiore, Firenze"},
+      {id:"ds1", d:1, time:"11:00", title:"Caffè seduti oppure Museo dell’Opera", note:"La pausa che mancava. Il Museo dell’Opera (Pietà Bandini, porte originali del Battistero) è incluso in tutti i pass. Alle 11:50 chi sale va all’ingresso della Cupola.", map:"Museo dell’Opera del Duomo, Firenze"},
+      {id:"ds2", d:1, time:"12:00", title:"Cupola per chi sale", note:"463 gradini, circa un’ora. Chi non sale può andare subito al Museo Galileo (12:10–13:20), a 10 minuti a piedi.", map:"Cupola del Brunelleschi, Firenze"},
+      {id:"ds3", d:1, time:"13:15", title:"Pranzo all’Antico Trippaio", note:"Piazza de’ Cimatori. A quest’ora può esserci coda: in alternativa Trippaio del Porcellino, a 200 metri.", map:"L’Antico Trippaio, Piazza de’ Cimatori, Firenze"},
+      {id:"ds4", d:1, time:"14:15", title:"Museo Galileo, oppure Oltrarno con calma", note:"Cannocchiali originali di Galileo e strumenti scientifici dei Medici, a 3 minuti dal trippaio. Chi l’ha già visto o non è interessato passeggia in Oltrarno.", map:"Museo Galileo, Firenze"},
+      {id:"ds5", d:1, time:"15:25", title:"Ritrovo a Ponte Vecchio", note:"A 2 minuti dal Museo Galileo.", map:"Ponte Vecchio, Firenze"},
+      {id:"us10", time:"15:30", title:"Salita da San Niccolò per le Rampe del Poggi", note:"30–35 minuti, in parte in salita.", map:"Rampe del Poggi, Firenze"},
+      {id:"us11", time:"16:05", title:"San Miniato al Monte", note:"Prima del Piazzale, così resta tempo per Palazzo Vecchio.", map:"Basilica di San Miniato al Monte, Firenze"},
+      {id:"us12", time:"16:35", title:"Piazzale Michelangelo", note:"Tramonto verso le 16:50.", map:"Piazzale Michelangelo, Firenze"},
+      {id:"us13", time:"17:05", title:"Discesa verso la Signoria", note:"Si parte puntuali: 30–35 minuti."},
+      {id:"us14", time:"17:40", title:"Museo di Palazzo Vecchio", note:"Ultimo ingresso alle 18:00.", map:"Palazzo Vecchio, Firenze"},
+      {id:"us15", time:"19:30", title:"Cena con bistecca", note:"Vicino alla Signoria. Ordinatela al sangue."}
+    ]}],
+    extra:{h:"Se siete stanchi, tagliate in quest’ordine", html:"<ol><li><strong>Museo di Palazzo Vecchio</strong>: cena anticipata.</li><li><strong>Battistero</strong>: si vede anche da fuori.</li><li><strong>Museo dell’Opera</strong> delle 11: diventa caffè seduti per tutti.</li></ol><p style=\"margin-top:10px\"><strong>Se piove</strong>: al posto di Piazzale e San Miniato, Museo dell’Opera o Museo Galileo per chi non l’ha visto.</p>"}
+  },
+  UPD[3],
+  { id:"map", tab:"Mappa", title:"Mappa", intro:"Schema del centro in scala. H è l’hotel. Scegli il giorno per vedere il percorso nell’ordine giusto." }
+];
+
 /* Coordinate proiettate da lat/lng reali, scala comune */
 const P = {
   hotel:[99,65,"Hotel"], smn:[62,43,"Stazione e tram"], mercato:[126,45,"Mercato Centrale"], cappelle:[131,64,"Cappelle Medicee"],
   accademia:[196,38,"Accademia"], duomo:[161,101,"Battistero e Duomo"], signoria:[159,161,"Cimatori e Palazzo Vecchio"],
   uffizi:[152,192,"Uffizi"], vinaio:[170,180,"Antico Vinaio"], ponte:[125,189,"Ponte Vecchio"], pitti:[87,239,"Palazzo Pitti"],
-  spirito:[61,215,"Santo Spirito"], smnbas:[79,91,"Santa Maria Novella"], niccolo:[217,258,"San Niccolò"], piazzale:[273,276,"Piazzale"], miniato:[273,336,"San Miniato"]
+  spirito:[61,215,"Santo Spirito"], smnbas:[79,91,"Santa Maria Novella"], galileo:[177,183,"Museo Galileo"], niccolo:[217,258,"San Niccolò"], piazzale:[273,276,"Piazzale"], miniato:[273,336,"San Miniato"]
 };
 const ROUTES = {
+  def:{
+    ven:{c:"--ven", start:"hotel", s:["cappelle","duomo","vinaio","signoria","ponte","spirito"], end:"hotel"},
+    sab:{c:"--sab", start:"hotel", s:["accademia","duomo","signoria","galileo","ponte","niccolo","miniato","piazzale"], end:"signoria"},
+    dom:{c:"--dom", start:"hotel", s:["uffizi","mercato","cappelle","smnbas","smn"]}
+  },
   upd:{
     ven:{c:"--ven", start:"hotel", s:["cappelle","duomo","vinaio","uffizi","pitti","spirito"], end:"hotel"},
     sab:{c:"--sab", start:"hotel", s:["accademia","duomo","signoria","ponte","niccolo","miniato","piazzale"], end:"signoria"},
@@ -332,10 +419,11 @@ const SIDE = {smnbas:"b", spirito:"b", smn:"t", ponte:"l", mercato:"l", niccolo:
 let state = {};
 try { state = JSON.parse(localStorage.getItem("firenze-checklist-v1") || "{}") || {}; } catch(e){ state = {}; }
 const save = () => { try { localStorage.setItem("firenze-checklist-v1", JSON.stringify(state)); } catch(e){} };
-let ver = "upd";
-try { ver = localStorage.getItem("firenze-ver") || "upd"; } catch(e){}
+let ver = "def";
+try { ver = localStorage.getItem("firenze-ver2") || "def"; } catch(e){}
 let mapDay = null;
-const data = () => ver === "upd" ? UPD : ORIG;
+const data = () => ver === "def" ? DEF : ver === "upd" ? UPD : ORIG;
+const BOOK = {obb:"Obbligatoria", cons:"Consigliata", no:"Non serve"};
 
 function itemHTML(it){
   const done = !!state[it.id];
@@ -345,7 +433,7 @@ function itemHTML(it){
   return `<li class="item${done?" done":""}" data-id="${it.id}">
     <input type="checkbox" class="check" id="c-${it.id}" ${done?"checked":""} aria-label="${it.title.replace(/"/g,"&quot;")}">
     <div>
-      <label class="top" for="c-${it.id}">${it.time?`<span class="time">${it.time}</span>`:""}<span class="title">${it.title}</span>${it.n&&ver==="upd"?` <span class="tag">Nuovo</span>`:""}</label>
+      <label class="top" for="c-${it.id}">${it.time?`<span class="time">${it.time}</span>`:""}<span class="title">${it.title}</span>${it.b?` <span class="tag ${it.b}">${BOOK[it.b]}</span>`:""}${(it.n&&ver==="upd")||(it.d&&ver==="def")?` <span class="tag">Nuovo</span>`:""}</label>
       ${it.note?`<p class="note">${it.note}</p>`:""}
       ${it.warn?`<p class="warn">${it.warn}</p>`:""}
       ${acts?`<div class="actions">${acts}</div>`:""}
@@ -427,9 +515,11 @@ function render(){
   }));
   document.querySelectorAll("#mapdays .tab").forEach(b=>b.addEventListener("click",()=>showMap(b.dataset.day)));
   document.querySelectorAll(".ver").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ver===ver));
-  document.getElementById("vernote").textContent = ver==="upd"
-    ? "Le voci con l’etichetta Nuovo sono state aggiunte o spostate rispetto al piano originale."
-    : "Versione iniziale, conservata per confronto. Gli orari validi sono nel piano aggiornato.";
+  document.getElementById("vernote").textContent = {
+    def:"Il piano da seguire. Le voci con l’etichetta Nuovo cambiano rispetto alla versione aggiornata.",
+    upd:"Versione intermedia, con la Torre di Arnolfo e la Cupola alle 11:15. Conservata per confronto.",
+    orig:"Versione iniziale, conservata per confronto."
+  }[ver];
   progress();
 }
 
@@ -484,7 +574,7 @@ function countdown(){
 document.querySelectorAll(".ver").forEach(b=>b.addEventListener("click",()=>{
   const keep = currentTab() || "prep";
   ver = b.dataset.ver;
-  try { localStorage.setItem("firenze-ver", ver); } catch(e){}
+  try { localStorage.setItem("firenze-ver2", ver); } catch(e){}
   render(); show(keep);
 }));
 
